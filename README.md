@@ -9,24 +9,21 @@ This project contains source code and supporting files for a serverless applicat
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
 
-If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.  
-The AWS Toolkit is an open source plug-in for popular IDEs that uses the SAM CLI to build and deploy serverless applications on AWS. The AWS Toolkit also adds a simplified step-through debugging experience for Lambda function code. See the following links to get started.
+## Datadog Integration
 
-* [CLion](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [GoLand](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [IntelliJ](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [WebStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [Rider](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PhpStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PyCharm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [RubyMine](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [DataGrip](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [VS Code](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/welcome.html)
-* [Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/welcome.html)
+This sample includes both the [Datadog Lambda Library](https://docs.datadoghq.com/serverless/libraries_integrations/library/) and [Datadog Lambda Extension](https://docs.datadoghq.com/serverless/libraries_integrations/extension/), both packaged and included as Lambda layers. The extension itself leverages Lambda extensions and acts as the log forwarder to direct logs and traces direct to Datadog, without the need to use CloudWatch Logs or AWS X-ray. Instead, the Lambda logs are shipped asynchronously in real-time via the Lambda Logs API and Datadog APM and distributed tracing is used.
+
+These Datadog Lambda Layers are included in all functions in this template via the [Datadog Serverless Macro](https://docs.datadoghq.com/serverless/libraries_integrations/macro/) making it easy to add functions without needing to be aware of always adding these references, and a single version reference to update.
+
+Lambda CloudWatch logs generation are disabled via a managed IAM policy included in the template, which is a supported mechanism to prevent log group or log stream creation when external logging is used.
+
+You can additionally use X-ray tracing and CloudWatch Logs in conjunction with these Datadog components, but both are disabled for this sample with only default CloudWatch Metrics being emitted.
 
 ## Deploy the sample application
 
 The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
+
+**First, you'll need to add your Datadog API Key to the stack which should be replaced in the top-level Stack parameters (you can store in KMS and use a different parameter to pull from KMS for more security). This API key can be found at [https://app.datadoghq.com/account/settings#api](https://app.datadoghq.com/account/settings#api)**
 
 To use the SAM CLI, you need the following tools.
 

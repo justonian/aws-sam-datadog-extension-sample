@@ -4,6 +4,9 @@
 ### Linux ###
 *~
 
+# Local SAM build artifacts, which are rebuilt with each invocation of 'sam build'
+.aws-sam/
+
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
